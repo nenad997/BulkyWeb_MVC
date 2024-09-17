@@ -1,6 +1,7 @@
 ﻿using BulkyWeb.Data;
 using BulkyWeb.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol;
 
 namespace BulkyWeb.Controllers
@@ -32,22 +33,34 @@ namespace BulkyWeb.Controllers
             //    ModelState.AddModelError("name", "The DIsplayOrder cannot exactly match the Name.");
             //}
 
-            if(!ModelState.IsValid) {
+            if (!ModelState.IsValid)
+            {
                 return View();
             }
-            this._db.Categories.Add(category);
-            this._db.SaveChanges();
-            TempData["success"] = "Category created successfully";
-            return RedirectToAction("Index", "Category");
+
+            try
+            {
+                this._db.Categories.Add(category);
+                var response = this._db.SaveChanges();
+                TempData["success"] = "Category created successfully";
+                return RedirectToAction("Index", "Category");
+            }
+            catch (DbUpdateException ex)
+            {
+                TempData["error"] = "Failed to add new category";
+                Console.WriteLine(ex.Message);
+                return RedirectToAction("Create", "Category");
+            }
         }
 
         public IActionResult Edit(int? id)
         {
-            if(id == null || id == 0) { 
+            if (id == null || id == 0)
+            {
                 return NotFound();
             }
             Category? categoryFromDb = _db.Categories.Find(id);
-            if(categoryFromDb == null)
+            if (categoryFromDb == null)
             {
                 return NotFound();
             }
@@ -66,10 +79,20 @@ namespace BulkyWeb.Controllers
             {
                 return View();
             }
-            this._db.Categories.Update(category);
-            this._db.SaveChanges();
-            TempData["success"] = "Category updated successfully";
-            return RedirectToAction("Index", "Category");
+
+            try
+            {
+                this._db.Categories.Update(category);
+                this._db.SaveChanges();
+                TempData["success"] = "Category updated successfully";
+                return RedirectToAction("Index", "Category");
+            }
+            catch (DbUpdateException ex)
+            {
+                TempData["error"] = "Failed to edit category";
+                Console.WriteLine(ex.Message);
+                return RedirectToAction("Edit", "Category");
+            }
         }
 
         public IActionResult Delete(int? id)
@@ -91,14 +114,24 @@ namespace BulkyWeb.Controllers
         public IActionResult DeletePost(int? id)
         {
             Category? categoryFromDb = this._db.Categories.Find(id);
-            if( categoryFromDb == null)
+            if (categoryFromDb == null)
             {
                 return NotFound();
             }
-            this._db.Categories.Remove(categoryFromDb);
-            this._db.SaveChanges();
-            TempData["success"] = "Category deleted successfully";
-            return RedirectToAction("Index", "Category");
+
+            try
+            {
+                this._db.Categories.Remove(categoryFromDb);
+                this._db.SaveChanges();
+                TempData["success"] = "Category deleted successfully";
+                return RedirectToAction("Index", "Category");
+            }
+            catch (DbUpdateException ex)
+            {
+                TempData["error"] = "Failed to delete category";
+                Console.WriteLine(ex.Message);
+                return RedirectToAction("Delete", "Category");
+            }
         }
     }
 }
