@@ -1,8 +1,8 @@
 ﻿using BulkyWeb.Data;
-using BulkyWeb.Repository.IRepository;
+using BulkyWeb.Data.Repository.IRepository;
 using System.Linq.Expressions;
 
-namespace BulkyWeb.Repository
+namespace BulkyWeb.Data.Repository
 {
     public abstract class Repository<T> : IRepository<T> where T : class
     {
@@ -26,18 +26,18 @@ namespace BulkyWeb.Repository
         public void Add(T entity)
         {
             db.Set<T>().Add(entity);
-            this.Save();
+            Save();
         }
 
         public void Remove(T entity)
         {
             db.Set<T>().Remove(entity);
-            this.Save();
+            Save();
         }
 
         public void Save()
         {
-            this.db.SaveChanges();
+            db.SaveChanges();
         }
     }
 }

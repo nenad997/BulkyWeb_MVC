@@ -1,5 +1,5 @@
-﻿using BulkyWeb.Models;
-using BulkyWeb.Repository;
+﻿using BulkyWeb.Data.Repository;
+using BulkyWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;

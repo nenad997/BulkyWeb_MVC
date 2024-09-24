@@ -1,5 +1,5 @@
 using BulkyWeb.Data;
-using BulkyWeb.Repository;
+using BulkyWeb.Data.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 

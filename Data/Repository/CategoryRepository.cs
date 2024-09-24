@@ -1,7 +1,7 @@
 ﻿using BulkyWeb.Data;
 using BulkyWeb.Models;
 
-namespace BulkyWeb.Repository
+namespace BulkyWeb.Data.Repository
 {
     public class CategoryRepository : Repository<Category>
     {
